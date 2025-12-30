@@ -274,7 +274,7 @@ def pixelmatch(
             pil_img2 = Image.open(img2).convert("RGBA")
         except Exception as e:  # pragma: no cover
             raise FileNotFoundError(f"Cannot open image file: {img2}") from e
-    
+
     arr1 = np.array(pil_img1, dtype=np.uint8)
     arr2 = np.array(pil_img2, dtype=np.uint8)
 
