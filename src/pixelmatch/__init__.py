@@ -229,8 +229,8 @@ def _draw_gray_pixels(img_arr, output_arr, alpha):
 
 
 def pixelmatch(
-    img1: Union[str, Path],
-    img2: Union[str, Path],
+    img1: Union[str, Path, Image],
+    img2: Union[str, Path, Image],
     diff_path: Union[str, Path, None] = None,
     threshold: float = 0.1,
     includeAA: bool = False,
@@ -244,8 +244,8 @@ def pixelmatch(
     Compare two images and return number of mismatched pixels.
 
     Args:
-        img1: First image file path
-        img2: Second image file path
+        img1: First image file path or PIL Image object
+        img2: Second image file path or PIL Image object
         diff_path: Optional path to save diff image as PNG
         threshold: Matching threshold (0 to 1); smaller is more sensitive.
         includeAA: Whether to count anti-aliased pixels as different.
@@ -259,8 +259,22 @@ def pixelmatch(
         Number of mismatched pixels
     """
     # Load images as RGBA arrays
-    pil_img1 = Image.open(img1).convert("RGBA")
-    pil_img2 = Image.open(img2).convert("RGBA")
+    if isinstance(img1, Image.Image):
+        pil_img1 = img1.convert("RGBA")
+    else:
+        try:  # pragma: no cover
+            pil_img1 = Image.open(img1).convert("RGBA")
+        except Exception as e:  # pragma: no cover
+            raise FileNotFoundError(f"Cannot open image file: {img1}") from e
+
+    if isinstance(img2, Image.Image):
+        pil_img2 = img2.convert("RGBA")
+    else:
+        try:  # pragma: no cover
+            pil_img2 = Image.open(img2).convert("RGBA")
+        except Exception as e:  # pragma: no cover
+            raise FileNotFoundError(f"Cannot open image file: {img2}") from e
+    
     arr1 = np.array(pil_img1, dtype=np.uint8)
     arr2 = np.array(pil_img2, dtype=np.uint8)
 

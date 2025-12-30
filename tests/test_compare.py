@@ -78,3 +78,12 @@ def test_compare_with_dimension_mismatch_raises_error(tmp_path):
 
     with pytest.raises(ValueError, match="Image dimensions must match"):
         pixelmatch(img1_path, img2_path)
+
+
+def test_compare_with_pil_images():
+    pil_img1 = Image.open(Path("tests/fixtures/1a.png"))
+    pil_img2 = Image.open(Path("tests/fixtures/1b.png"))
+
+    result_num_diffs = pixelmatch(pil_img1, pil_img2, threshold=0.05)
+
+    assert result_num_diffs == 143
