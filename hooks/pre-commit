@@ -50,3 +50,9 @@ if [ $? -ne 0 ]; then
 		echo "Ruff found formatting issues. Run: ruff format"
     exit 1
 fi
+
+ty check
+if [ $? -ne 0 ]; then
+		echo "Python type checks failes. Run: py check"
+    exit 1
+fi
