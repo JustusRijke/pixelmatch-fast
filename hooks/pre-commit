@@ -39,19 +39,19 @@ EOF
 fi
 
 # Ruff checks
-ruff check
+ruff check -q
 if [ $? -ne 0 ]; then
 		echo "Ruff found linting errors. Run: ruff check --fix"
     exit 1
 fi
 
-ruff format --check
+ruff format --check -q
 if [ $? -ne 0 ]; then
 		echo "Ruff found formatting issues. Run: ruff format"
     exit 1
 fi
 
-ty check
+ty check -q
 if [ $? -ne 0 ]; then
 		echo "Python type checks failes. Run: py check"
     exit 1
