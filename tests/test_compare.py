@@ -57,6 +57,7 @@ def test_compare(img1, img2, diff, options, num_diffs, tmp_path):
     assert result_num_diffs == num_diffs
 
     if diff:
+        assert diff_path is not None
         expected_diff_image = Image.open(Path(f"tests/fixtures/{diff}.png")).convert(
             "RGBA"
         )

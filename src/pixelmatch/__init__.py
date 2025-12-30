@@ -213,7 +213,7 @@ def _compare_pixels(
 def _draw_gray_pixels(img_arr, output_arr, alpha):
     """Draw grayscale background with alpha blending."""
     h, w = img_arr.shape[:2]
-    for y in prange(h):
+    for y in prange(h):  # type: ignore[misc]
         for x in range(w):
             r = float(img_arr[y, x, 0])
             g = float(img_arr[y, x, 1])
@@ -229,8 +229,8 @@ def _draw_gray_pixels(img_arr, output_arr, alpha):
 
 
 def pixelmatch(
-    img1: Union[str, Path, Image],
-    img2: Union[str, Path, Image],
+    img1: Union[str, Path, Image.Image],
+    img2: Union[str, Path, Image.Image],
     diff_path: Union[str, Path, None] = None,
     threshold: float = 0.1,
     includeAA: bool = False,

@@ -1,3 +1,5 @@
+from typing import cast
+
 import click
 
 from . import pixelmatch
@@ -76,10 +78,14 @@ def cli(
     diff_mask,
 ):
     """Compare two images pixel-by-pixel and visualize differences."""
-    aa_color_tuple = tuple(map(int, aa_color.split(",")))
-    diff_color_tuple = tuple(map(int, diff_color.split(",")))
+    aa_color_tuple = cast(tuple[int, int, int], tuple(map(int, aa_color.split(","))))
+    diff_color_tuple = cast(
+        tuple[int, int, int], tuple(map(int, diff_color.split(",")))
+    )
     diff_color_alt_tuple = (
-        tuple(map(int, diff_color_alt.split(","))) if diff_color_alt else None
+        cast(tuple[int, int, int], tuple(map(int, diff_color_alt.split(","))))
+        if diff_color_alt
+        else None
     )
 
     num_diff = pixelmatch(
