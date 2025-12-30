@@ -4,6 +4,7 @@
 [![codecov](https://codecov.io/github/JustusRijke/pixelmatch-fast/graph/badge.svg?token=PXD6VY28LO)](https://codecov.io/github/JustusRijke/pixelmatch-fast)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![PyPI - Downloads](https://img.shields.io/pypi/dw/pixelmatch-fast)
 
 High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) for perceptual image comparison
 
@@ -69,8 +70,6 @@ num_diff = pixelmatch(
     "image1.png",
     "image2.png",
     diff_path="diff.png",  # Optional: save diff image
-    threshold=0.1,         # Matching threshold (0 to 1)
-    includeAA=False,      # Whether to count anti-aliased pixels
 )
 
 print(f"Found {num_diff} mismatched pixels")
@@ -111,3 +110,4 @@ The CI workflow automatically runs tests both with and without numba enabled, en
 ## License
 
 MIT
+
