@@ -96,9 +96,10 @@ Check code quality:
 ```bash
 ruff check
 ruff format --check
+mypy .
 ```
 
-Install pre-commit hook (runs ruff automatically before commits):
+Install pre-commit hook (runs ruff & mypy automatically before commits):
 ```bash
 cp hooks/pre-commit .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
