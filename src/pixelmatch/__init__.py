@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Union
 
 import numpy as np
+import numpy.typing as npt
 from numba import njit, prange
 from PIL import Image
 
@@ -16,14 +17,22 @@ __version__ = version("pixelmatch-fast")
 MAX_YIQ_DELTA = 35215.0  # Maximum possible value for the YIQ difference metric
 
 
-@njit(cache=True)
-def _blend_channel(c1, a1, c2, a2, background, da):
+@njit(cache=True)  # type: ignore
+def _blend_channel(
+    c1: float, a1: float, c2: float, a2: float, background: float, da: float
+) -> float:
     """Blend single color channel with alpha compositing."""
     return (c1 * a1 - c2 * a2 - background * da) / 255.0
 
 
-@njit(cache=True)
-def _color_delta(img1, img2, k, m, y_only):
+@njit(cache=True)  # type: ignore
+def _color_delta(
+    img1: npt.NDArray[np.uint8],
+    img2: npt.NDArray[np.uint8],
+    k: int,
+    m: int,
+    y_only: bool,
+) -> float:
     """Calculate color difference using YIQ color space."""
     r1 = float(img1[k])
     g1 = float(img1[k + 1])
@@ -65,8 +74,10 @@ def _color_delta(img1, img2, k, m, y_only):
     return delta
 
 
-@njit(cache=True)
-def _has_many_siblings(img32, x1, y1, width, height):
+@njit(cache=True)  # type: ignore
+def _has_many_siblings(
+    img32: npt.NDArray[np.uint32], x1: int, y1: int, width: int, height: int
+) -> bool:
     """Check if pixel has 3+ identical neighbors."""
     x0 = max(x1 - 1, 0)
     y0 = max(y1 - 1, 0)
@@ -93,8 +104,16 @@ def _has_many_siblings(img32, x1, y1, width, height):
     return False
 
 
-@njit(cache=True)
-def _antialiased(img, x1, y1, width, height, a32, b32):
+@njit(cache=True)  # type: ignore
+def _antialiased(
+    img: npt.NDArray[np.uint8],
+    x1: int,
+    y1: int,
+    width: int,
+    height: int,
+    a32: npt.NDArray[np.uint32],
+    b32: npt.NDArray[np.uint32],
+) -> bool:
     """Detect if pixel is anti-aliased."""
     x0 = max(x1 - 1, 0)
     y0 = max(y1 - 1, 0)
@@ -138,7 +157,7 @@ def _antialiased(img, x1, y1, width, height, a32, b32):
     if min_delta == 0 or max_delta == 0:
         return False
 
-    return (
+    return (  # type: ignore[no-any-return]
         _has_many_siblings(a32, min_x, min_y, width, height)
         and _has_many_siblings(b32, min_x, min_y, width, height)
     ) or (
@@ -147,8 +166,10 @@ def _antialiased(img, x1, y1, width, height, a32, b32):
     )
 
 
-@njit(cache=True)
-def _draw_pixel(output, pos, r, g, b):
+@njit(cache=True)  # type: ignore
+def _draw_pixel(
+    output: npt.NDArray[np.uint8], pos: int, r: int, g: int, b: int
+) -> None:
     """Draw RGBA pixel at position in output array."""
     output[pos] = r
     output[pos + 1] = g
@@ -156,28 +177,28 @@ def _draw_pixel(output, pos, r, g, b):
     output[pos + 3] = 255
 
 
-@njit(cache=True)
+@njit(cache=True)  # type: ignore
 def _compare_pixels(
-    img1_flat,
-    img2_flat,
-    a32,
-    b32,
-    output_flat,
-    width,
-    height,
-    max_delta,
-    includeAA,
-    diff_mask,
-    aa_r,
-    aa_g,
-    aa_b,
-    diff_r,
-    diff_g,
-    diff_b,
-    diff_alt_r,
-    diff_alt_g,
-    diff_alt_b,
-):
+    img1_flat: npt.NDArray[np.uint8],
+    img2_flat: npt.NDArray[np.uint8],
+    a32: npt.NDArray[np.uint32],
+    b32: npt.NDArray[np.uint32],
+    output_flat: npt.NDArray[np.uint8],
+    width: int,
+    height: int,
+    max_delta: float,
+    includeAA: bool,
+    diff_mask: bool,
+    aa_r: int,
+    aa_g: int,
+    aa_b: int,
+    diff_r: int,
+    diff_g: int,
+    diff_b: int,
+    diff_alt_r: int,
+    diff_alt_g: int,
+    diff_alt_b: int,
+) -> int:
     """Compare pixels and draw diff output. Returns mismatch count."""
     diff = 0
     for y in range(height):
@@ -209,11 +230,13 @@ def _compare_pixels(
     return diff
 
 
-@njit(cache=True, parallel=True)
-def _draw_gray_pixels(img_arr, output_arr, alpha):
+@njit(cache=True, parallel=True)  # type: ignore
+def _draw_gray_pixels(
+    img_arr: npt.NDArray[np.uint8], output_arr: npt.NDArray[np.uint8], alpha: float
+) -> None:
     """Draw grayscale background with alpha blending."""
     h, w = img_arr.shape[:2]
-    for y in prange(h):  # type: ignore[misc]
+    for y in prange(h):
         for x in range(w):
             r = float(img_arr[y, x, 0])
             g = float(img_arr[y, x, 1])
@@ -342,7 +365,7 @@ def pixelmatch(
     if diff_path:
         Image.fromarray(output_arr, mode="RGBA").save(Path(diff_path), format="PNG")
 
-    return diff
+    return diff  # type: ignore[no-any-return]
 
 
 __all__ = ["pixelmatch", "__version__"]

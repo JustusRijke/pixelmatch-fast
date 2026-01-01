@@ -19,6 +19,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
+    "Typing :: Typed",
 ]
 dependencies = [
     "click>=8",
@@ -49,6 +50,11 @@ source = "vcs"
 
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
+
+[tool.mypy]
+disable_error_code = ["import-untyped", "import-not-found"]
+strict=true
+disallow_any_explicit=true
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config"]

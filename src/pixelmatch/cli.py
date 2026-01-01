@@ -66,17 +66,17 @@ from . import pixelmatch
     help="Draw diff over transparent background",
 )
 def cli(
-    img1,
-    img2,
-    output,
-    threshold,
-    includeAA,
-    alpha,
-    aa_color,
-    diff_color,
-    diff_color_alt,
-    diff_mask,
-):
+    img1: str,
+    img2: str,
+    output: str | None,
+    threshold: float,
+    includeAA: bool,
+    alpha: float,
+    aa_color: str,
+    diff_color: str,
+    diff_color_alt: str | None,
+    diff_mask: bool,
+) -> None:
     """Compare two images pixel-by-pixel and visualize differences."""
     aa_color_tuple = cast(tuple[int, int, int], tuple(map(int, aa_color.split(","))))
     diff_color_tuple = cast(

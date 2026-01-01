@@ -51,8 +51,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-ty check -q
+# Mypy checks
+mypy --strict .
 if [ $? -ne 0 ]; then
-		echo "Python type checks failes. Run: py check"
+		echo "Mypy found type errors. Fix them before committing."
     exit 1
 fi

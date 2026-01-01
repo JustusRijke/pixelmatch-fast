@@ -3,12 +3,23 @@ Tests are identical to https://github.com/mapbox/pixelmatch/blob/v7.1.0/test/tes
 """
 
 from pathlib import Path
+from typing import TypedDict
 
 import numpy as np
 import pytest
 from PIL import Image
 
 from pixelmatch import pixelmatch
+
+
+class PixelmatchOptions(TypedDict, total=False):
+    threshold: float
+    includeAA: bool
+    alpha: float
+    aa_color: tuple[int, int, int]
+    diff_color: tuple[int, int, int]
+    diff_color_alt: tuple[int, int, int]
+    diff_mask: bool
 
 
 @pytest.mark.parametrize(
@@ -45,7 +56,14 @@ from pixelmatch import pixelmatch
         ("8a", "5b", "8diff", {"threshold": 0.05}, 32896),
     ],
 )
-def test_compare(img1, img2, diff, options, num_diffs, tmp_path):
+def test_compare(
+    img1: str,
+    img2: str,
+    diff: str | None,
+    options: PixelmatchOptions,
+    num_diffs: int,
+    tmp_path: Path,
+) -> None:
     diff_path = tmp_path / "diff.png" if diff else None
     result_num_diffs = pixelmatch(
         Path(f"tests/fixtures/{img1}.png"),
@@ -67,7 +85,7 @@ def test_compare(img1, img2, diff, options, num_diffs, tmp_path):
         )
 
 
-def test_compare_with_dimension_mismatch_raises_error(tmp_path):
+def test_compare_with_dimension_mismatch_raises_error(tmp_path: Path) -> None:
     img1_path = tmp_path / "img1.png"
     img2_path = tmp_path / "img2.png"
 
@@ -81,7 +99,7 @@ def test_compare_with_dimension_mismatch_raises_error(tmp_path):
         pixelmatch(img1_path, img2_path)
 
 
-def test_compare_with_pil_images():
+def test_compare_with_pil_images() -> None:
     pil_img1 = Image.open(Path("tests/fixtures/1a.png"))
     pil_img2 = Image.open(Path("tests/fixtures/1b.png"))
 

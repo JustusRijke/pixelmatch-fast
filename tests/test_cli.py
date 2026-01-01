@@ -5,7 +5,7 @@ from PIL import Image
 from pixelmatch.cli import cli
 
 
-def test_cli_compares_identical_images():
+def test_cli_compares_identical_images() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():
         img = np.full((10, 10, 4), 255, dtype=np.uint8)
@@ -18,7 +18,7 @@ def test_cli_compares_identical_images():
         assert "Mismatched pixels: 0" in result.output
 
 
-def test_cli_exit_code_on_identical_images():
+def test_cli_exit_code_on_identical_images() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():
         img = np.full((10, 10, 4), 255, dtype=np.uint8)
@@ -30,7 +30,7 @@ def test_cli_exit_code_on_identical_images():
         assert result.exit_code == 0
 
 
-def test_cli_exit_code_on_different_images():
+def test_cli_exit_code_on_different_images() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():
         img1 = np.full((10, 10, 4), 255, dtype=np.uint8)
