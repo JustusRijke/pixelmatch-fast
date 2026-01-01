@@ -103,3 +103,24 @@ def test_compare_with_pil_images() -> None:
     result_num_diffs = pixelmatch(pil_img1, pil_img2, threshold=0.05)
 
     assert result_num_diffs == 143
+
+
+def test_output_diff_pil_image() -> None:
+    pil_img1 = Image.open(Path("tests/fixtures/1a.png"))
+    output_img = Image.new("RGBA", pil_img1.size)
+    pixelmatch(
+        pil_img1,
+        Path("tests/fixtures/1b.png"),
+        output=output_img,
+    )
+    assert output_img.size == pil_img1.size
+
+
+def test_output_diff_file(tmp_path: Path) -> None:
+    diff_path = tmp_path / "diff.png"
+    pixelmatch(
+        Path("tests/fixtures/1a.png"),
+        Path("tests/fixtures/1b.png"),
+        output=diff_path,
+    )
+    assert diff_path.exists()

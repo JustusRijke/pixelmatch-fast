@@ -177,6 +177,22 @@ def _draw_pixel(
     output[pos + 3] = 255
 
 
+def _save_diff_output(
+    output: Union[str, Path, Image.Image],
+    output_arr: npt.NDArray[np.uint8],
+) -> None:
+    """Save or fill diff output image."""
+    if isinstance(output, Image.Image):
+        diff_img = Image.fromarray(output_arr, mode="RGBA")
+        if output.size != diff_img.size:
+            output.im = diff_img.im
+            output._size = diff_img.size
+        else:
+            output.paste(diff_img)
+    else:
+        Image.fromarray(output_arr, mode="RGBA").save(Path(output), format="PNG")
+
+
 @njit(cache=True)  # type: ignore
 def _compare_pixels(
     img1_flat: npt.NDArray[np.uint8],
@@ -331,17 +347,7 @@ def pixelmatch(
         if not diff_mask:
             _draw_gray_pixels(arr1, output_arr, alpha)
         if output:  # pragma: no cover
-            if isinstance(output, Image.Image):
-                diff_img = Image.fromarray(output_arr, mode="RGBA")
-                if output.size != diff_img.size:
-                    output.im = diff_img.im
-                    output._size = diff_img.size
-                else:
-                    output.paste(diff_img)
-            else:
-                Image.fromarray(output_arr, mode="RGBA").save(
-                    Path(output), format="PNG"
-                )
+            _save_diff_output(output, output_arr)
         return 0
 
     max_delta = MAX_YIQ_DELTA * threshold * threshold
@@ -373,15 +379,7 @@ def pixelmatch(
 
     # Save diff image if output provided
     if output:
-        if isinstance(output, Image.Image):
-            diff_img = Image.fromarray(output_arr, mode="RGBA")
-            if output.size != diff_img.size:
-                output.im = diff_img.im
-                output._size = diff_img.size
-            else:
-                output.paste(diff_img)
-        else:
-            Image.fromarray(output_arr, mode="RGBA").save(Path(output), format="PNG")
+        _save_diff_output(output, output_arr)
 
     return diff  # type: ignore[no-any-return]
 
