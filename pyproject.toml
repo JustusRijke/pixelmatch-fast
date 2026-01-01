@@ -36,7 +36,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "ruff",
-    "ty",
+    "mypy",
 ]
 
 [project.scripts]
