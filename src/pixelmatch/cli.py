@@ -57,7 +57,7 @@ from . import pixelmatch
     "--diff-color-alt",
     type=str,
     default=None,
-    help="Alternative diff color for darkened pixels (R,G,B)",
+    help='Alternative color to differentiate between "added" and "removed" parts (R,G,B)',
 )
 @click.option(
     "--diff-mask",
@@ -91,7 +91,7 @@ def cli(
     num_diff = pixelmatch(
         img1=img1,
         img2=img2,
-        diff_path=output,
+        output=output,
         threshold=threshold,
         includeAA=includeAA,
         alpha=alpha,

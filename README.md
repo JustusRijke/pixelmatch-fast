@@ -47,7 +47,7 @@ Options:
   --aa-color TEXT        Color of anti-aliased pixels (R,G,B)  [default:
                          255,255,0]
   --diff-color TEXT      Color of different pixels (R,G,B)  [default: 255,0,0]
-  --diff-color-alt TEXT  Alternative diff color for darkened pixels (R,G,B)
+  --diff-color-alt TEXT  Alternative color to differentiate between "added" and "removed" parts (R,G,B)
   --diff-mask            Draw diff over transparent background
   --help                 Show this message and exit.
 ```
@@ -69,11 +69,24 @@ from pixelmatch import pixelmatch
 num_diff = pixelmatch(
     "image1.png",
     "image2.png",
-    diff_path="diff.png",  # Optional: save diff image
+    output="diff.png",  # Optional: save diff image
 )
 
 print(f"Found {num_diff} mismatched pixels")
 ```
+
+### Arguments
+
+- `img1`, `img2` — Image paths (str or Path) or PIL Image objects to compare. Note: image dimensions must be equal.
+- `output` — Image output for the diff. Can be a file path (str or Path) to save as PNG, a PIL Image object to fill with diff data, or `None` if diff output is not needed.
+- `threshold` — Matching threshold, ranges from `0` to `1`. Smaller values make the comparison more sensitive. `0.1` by default.
+- `includeAA` — Whether to count anti-aliased pixels as different. `False` by default.
+- `alpha` — Blending factor of unchanged pixels in the diff output. Ranges from `0` for pure white to `1` for original brightness. `0.1` by default.
+- `aa_color` — Tuple of `(R, G, B)` color for anti-aliased pixels in diff output. `(255, 255, 0)` (yellow) by default.
+- `diff_color` — Tuple of `(R, G, B)` color for different pixels in diff output. `(255, 0, 0)` (red) by default.
+- `diff_color_alt` — Tuple of `(R, G, B)` for an alternative color to use for dark on light differences to differentiate between "added" and "removed" parts. If not provided, all differing pixels use `diff_color`.
+- `diff_mask` — Draw the diff over a transparent background (a mask), rather than over the original image. `False` by default.
+
 
 ## Development
 
