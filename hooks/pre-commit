@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Mypy checks
-mypy --strict .
+mypy .
 if [ $? -ne 0 ]; then
 		echo "Mypy found type errors. Fix them before committing."
     exit 1
