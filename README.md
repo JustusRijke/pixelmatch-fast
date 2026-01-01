@@ -10,7 +10,7 @@ High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pi
 
 Pixelmatch is a tool that automatically highlights differences between two images while ignoring anti-aliasing artifacts.
 
-For more information about pixelmatch capabilities and examples, see the [mapbox/pixelmatch repository](https://github.com/mapbox/pixelmatch).
+For more information about pixelmatch capabilities and examples, see the [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) repository.
 
 This project tries to stay up to date with the current pixelmatch version (currently matches with v7.1.0).
 
