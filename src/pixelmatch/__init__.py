@@ -254,7 +254,7 @@ def _draw_gray_pixels(
 def pixelmatch(
     img1: Union[str, Path, Image.Image],
     img2: Union[str, Path, Image.Image],
-    diff_path: Union[str, Path, None] = None,
+    output: Union[str, Path, Image.Image, None] = None,
     threshold: float = 0.1,
     includeAA: bool = False,
     alpha: float = 0.1,
@@ -269,13 +269,13 @@ def pixelmatch(
     Args:
         img1: First image file path or PIL Image object
         img2: Second image file path or PIL Image object
-        diff_path: Optional path to save diff image as PNG
+        output: Optional output for diff image. Can be a path (str/Path) to save as PNG, or a PIL Image object to fill with diff data.
         threshold: Matching threshold (0 to 1); smaller is more sensitive.
         includeAA: Whether to count anti-aliased pixels as different.
         alpha: Opacity of original image in diff output.
         aa_color: Color of anti-aliased pixels in diff output. Default yellow.
         diff_color: Color of different pixels in diff output. Default red.
-        diff_color_alt: Alternative diff color for darkened pixels. Default same as diff_color.
+        diff_color_alt: Alternative color to differentiate between "added" and "removed" parts. Default same as diff_color.
         diff_mask: Draw the diff over a transparent background (a mask).
 
     Returns:
@@ -330,8 +330,18 @@ def pixelmatch(
     if np.array_equal(a32, b32):
         if not diff_mask:
             _draw_gray_pixels(arr1, output_arr, alpha)
-        if diff_path:  # pragma: no cover
-            Image.fromarray(output_arr, mode="RGBA").save(Path(diff_path), format="PNG")
+        if output:  # pragma: no cover
+            if isinstance(output, Image.Image):
+                diff_img = Image.fromarray(output_arr, mode="RGBA")
+                if output.size != diff_img.size:
+                    output.im = diff_img.im
+                    output._size = diff_img.size
+                else:
+                    output.paste(diff_img)
+            else:
+                Image.fromarray(output_arr, mode="RGBA").save(
+                    Path(output), format="PNG"
+                )
         return 0
 
     max_delta = MAX_YIQ_DELTA * threshold * threshold
@@ -361,9 +371,17 @@ def pixelmatch(
         diff_color_alt[2],
     )
 
-    # Save diff image if path provided
-    if diff_path:
-        Image.fromarray(output_arr, mode="RGBA").save(Path(diff_path), format="PNG")
+    # Save diff image if output provided
+    if output:
+        if isinstance(output, Image.Image):
+            diff_img = Image.fromarray(output_arr, mode="RGBA")
+            if output.size != diff_img.size:
+                output.im = diff_img.im
+                output._size = diff_img.size
+            else:
+                output.paste(diff_img)
+        else:
+            Image.fromarray(output_arr, mode="RGBA").save(Path(output), format="PNG")
 
     return diff  # type: ignore[no-any-return]
 

@@ -64,25 +64,22 @@ def test_compare(
     num_diffs: int,
     tmp_path: Path,
 ) -> None:
-    diff_path = tmp_path / "diff.png" if diff else None
+    output_img = Image.new("RGBA", (1, 1)) if diff else None
     result_num_diffs = pixelmatch(
         Path(f"tests/fixtures/{img1}.png"),
         Path(f"tests/fixtures/{img2}.png"),
-        diff_path=diff_path,
+        output=output_img,
         **options,
     )
 
     assert result_num_diffs == num_diffs
 
     if diff:
-        assert diff_path is not None
+        assert output_img is not None
         expected_diff_image = Image.open(Path(f"tests/fixtures/{diff}.png")).convert(
             "RGBA"
         )
-        actual_diff_image = Image.open(diff_path).convert("RGBA")
-        assert np.array_equal(
-            np.array(actual_diff_image), np.array(expected_diff_image)
-        )
+        assert np.array_equal(np.array(output_img), np.array(expected_diff_image))
 
 
 def test_compare_with_dimension_mismatch_raises_error(tmp_path: Path) -> None:
