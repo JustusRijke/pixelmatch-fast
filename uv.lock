@@ -492,7 +492,7 @@ dev = [
 requires-dist = [
     { name = "click", specifier = ">=8" },
     { name = "numba", specifier = ">=0.57" },
-    { name = "numpy", specifier = ">=1.21.2" },
+    { name = "numpy", specifier = ">=1.22.3" },
     { name = "pillow", specifier = ">=10" },
 ]
 
