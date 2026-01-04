@@ -4,6 +4,7 @@
 [![codecov](https://codecov.io/github/JustusRijke/pixelmatch-fast/graph/badge.svg?token=PXD6VY28LO)](https://codecov.io/github/JustusRijke/pixelmatch-fast)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PyPI - Version](https://img.shields.io/pypi/v/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dw/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 
 High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) for perceptual image comparison
@@ -22,7 +23,8 @@ Use pixelmatch-py if you want a clean port with very little dependencies, use pi
 
 ## Installation
 
-Install the package:
+Install Python (v3.10 or higher) and install the package:
+
 ```bash
 pip install pixelmatch-fast
 ```
@@ -90,36 +92,39 @@ print(f"Found {num_diff} mismatched pixels")
 
 ## Development
 
-Install with dev dependencies (pytest, ruff):
+Install [uv](https://github.com/astral-sh/uv?tab=readme-ov-file#installation). Then, install dependencies & activate the automatically generated virtual environment:
+
 ```bash
-pip install -e .[dev]
+uv sync --locked
+source .venv/bin/activate
 ```
+
+Skip `--locked` to use the newest dependencies (this might modify `uv.lock`)
 
 Run tests:
 ```bash
-pytest tests/
+pytest
 ```
 
 Run tests with coverage (disables numba JIT compilation):
 ```bash
-NUMBA_DISABLE_JIT=1 pytest tests/ --cov
+NUMBA_DISABLE_JIT=1 pytest --cov
 ```
 
 Check code quality:
 ```bash
 ruff check
 ruff format --check
-mypy .
+ty check
 ```
 
-Install pre-commit hook (runs ruff & mypy automatically before commits):
+Better yet, install the [pre-commit](.git/hooks/pre-commit) hook, which runs code quality checks before every commit:
 ```bash
 cp hooks/pre-commit .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 ```
 
 The CI workflow automatically runs tests both with and without numba enabled, ensuring both the optimized and fallback code paths are tested.
-
 
 ## License
 
