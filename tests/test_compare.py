@@ -3,7 +3,6 @@ Tests are identical to https://github.com/mapbox/pixelmatch/blob/v7.1.0/test/tes
 """
 
 from pathlib import Path
-from typing import TypedDict
 
 import numpy as np
 import pytest
@@ -12,18 +11,8 @@ from PIL import Image
 from pixelmatch import pixelmatch
 
 
-class PixelmatchOptions(TypedDict, total=False):
-    threshold: float
-    includeAA: bool
-    alpha: float
-    aa_color: tuple[int, int, int]
-    diff_color: tuple[int, int, int]
-    diff_color_alt: tuple[int, int, int]
-    diff_mask: bool
-
-
 @pytest.mark.parametrize(
-    "img1, img2, diff, options, num_diffs",
+    ("img1", "img2", "diff", "options", "num_diffs"),
     [
         ("1a", "1b", None, {"threshold": 0.05}, 143),
         ("1a", "1b", None, {}, 106),
@@ -60,7 +49,7 @@ def test_compare(
     img1: str,
     img2: str,
     diff: str | None,
-    options: PixelmatchOptions,
+    options,
     num_diffs: int,
     tmp_path: Path,
 ) -> None:

@@ -1,7 +1,12 @@
 {
-    "python.testing.pytestArgs": [
-        "tests"
-    ],
+    // Format with Ruff on save & sort imports
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports.ruff": "explicit"
+    },
+
+    // Configure Pytest
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
 }
