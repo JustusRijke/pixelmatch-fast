@@ -17,7 +17,7 @@ __version__ = version("pixelmatch-fast")
 MAX_YIQ_DELTA = 35215.0  # Maximum possible value for the YIQ difference metric
 
 
-@njit(cache=True)  # type: ignore
+@njit(cache=True)
 def _blend_channel(
     c1: float, a1: float, c2: float, a2: float, background: float, da: float
 ) -> float:
@@ -25,7 +25,7 @@ def _blend_channel(
     return (c1 * a1 - c2 * a2 - background * da) / 255.0
 
 
-@njit(cache=True)  # type: ignore
+@njit(cache=True)
 def _color_delta(
     img1: npt.NDArray[np.uint8],
     img2: npt.NDArray[np.uint8],
@@ -74,7 +74,7 @@ def _color_delta(
     return delta
 
 
-@njit(cache=True)  # type: ignore
+@njit(cache=True)
 def _has_many_siblings(
     img32: npt.NDArray[np.uint32], x1: int, y1: int, width: int, height: int
 ) -> bool:
@@ -104,7 +104,7 @@ def _has_many_siblings(
     return False
 
 
-@njit(cache=True)  # type: ignore
+@njit(cache=True)
 def _antialiased(
     img: npt.NDArray[np.uint8],
     x1: int,
@@ -157,7 +157,7 @@ def _antialiased(
     if min_delta == 0 or max_delta == 0:
         return False
 
-    return (  # type: ignore[no-any-return]
+    return (
         _has_many_siblings(a32, min_x, min_y, width, height)
         and _has_many_siblings(b32, min_x, min_y, width, height)
     ) or (
@@ -166,7 +166,7 @@ def _antialiased(
     )
 
 
-@njit(cache=True)  # type: ignore
+@njit(cache=True)
 def _draw_pixel(
     output: npt.NDArray[np.uint8], pos: int, r: int, g: int, b: int
 ) -> None:
@@ -193,7 +193,7 @@ def _save_diff_output(
         Image.fromarray(output_arr, mode="RGBA").save(Path(output), format="PNG")
 
 
-@njit(cache=True)  # type: ignore
+@njit(cache=True)
 def _compare_pixels(
     img1_flat: npt.NDArray[np.uint8],
     img2_flat: npt.NDArray[np.uint8],
@@ -246,13 +246,13 @@ def _compare_pixels(
     return diff
 
 
-@njit(cache=True, parallel=True)  # type: ignore
+@njit(cache=True, parallel=True)
 def _draw_gray_pixels(
     img_arr: npt.NDArray[np.uint8], output_arr: npt.NDArray[np.uint8], alpha: float
 ) -> None:
     """Draw grayscale background with alpha blending."""
     h, w = img_arr.shape[:2]
-    for y in prange(h):
+    for y in prange(h):  # type: ignore
         for x in range(w):
             r = float(img_arr[y, x, 0])
             g = float(img_arr[y, x, 1])
@@ -381,7 +381,7 @@ def pixelmatch(
     if output:
         _save_diff_output(output, output_arr)
 
-    return diff  # type: ignore[no-any-return]
+    return diff
 
 
 __all__ = ["pixelmatch", "__version__"]
