@@ -11,30 +11,6 @@ High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pi
 
 Pixelmatch is a tool that automatically highlights differences between two images while ignoring anti-aliasing artifacts. For more information about pixelmatch capabilities and examples, see the [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) repository.
 
-## Similar Projects
-
-* **[mapbox/pixelmatch](https://github.com/mapbox/pixelmatch)**: The original pixelmatch implementation (JavaScript).
-* **[pixelmatch-py](https://github.com/whtsky/pixelmatch-py)**: A pure-Python port with no dependencies. Best for environments where speed isn't critical or where you cannot install heavy libraries.
-* **[pybind11-pixelmatch](https://github.com/cubao/pybind11_pixelmatch)**: Python bindings for the C++ port of pixelmatch. Offers the highest raw performance but may require a C++ compiler if wheels aren't available for your platform and can encounter issues with modern installers like `uv`.
-
-### Performance Comparison
-
-Test conditions: 500×100 RGBA images, Python 3.11.2.
-
-| Variant | Cold Start | Warm Start (JIT) | Relative Speed |
-|-|-|-|-|
-| mapbox/pixelmatch (JS) | 139 ms | 113 ms | **1.00x** |
-| pixelmatch-py | 12,397 ms | 12,216 ms | **0.01x** |
-| pybind11-pixelmatch | 88 ms | 81 ms | **1.40x** |
-| pixelmatch-fast | 1972 ms | 101 ms | **1.12x** |
-
-**Why is the warm start faster?**
-`pixelmatch-fast` leverages [numba](https://numba.pydata.org) for Just-In-Time (JIT) compilation. The "Cold Start" includes the one-time overhead of Numba compiling the Python code into optimized machine code. Subsequent "Warm Start" executions run at full compiled speed.
-
-**Why choose pixelmatch-fast?**
-While `pybind11-pixelmatch` is faster, `pixelmatch-fast` tries to stay up to date with the current `mapbox/pixelmatch` version (currently v7.1.0), provides a more Pythonic experience and is compatible with modern tooling like `uv`. It delivers a **100x speedup** over the pure-Python baseline without the complexities of C++ extensions.
-
-
 ## Installation
 
 Install Python (v3.10 or higher) and install the package:
@@ -103,6 +79,29 @@ print(f"Found {num_diff} mismatched pixels")
 - `diff_color_alt` — Tuple of `(R, G, B)` for an alternative color to use for dark on light differences to differentiate between "added" and "removed" parts. If not provided, all differing pixels use `diff_color`.
 - `diff_mask` — Draw the diff over a transparent background (a mask), rather than over the original image. `False` by default.
 
+
+## Similar Projects
+
+* **[mapbox/pixelmatch](https://github.com/mapbox/pixelmatch)**: The original pixelmatch implementation (JavaScript).
+* **[pixelmatch-py](https://github.com/whtsky/pixelmatch-py)**: A pure-Python port with no dependencies. Best for environments where speed isn't critical or where you cannot install heavy libraries.
+* **[pybind11-pixelmatch](https://github.com/cubao/pybind11_pixelmatch)**: Python bindings for the C++ port of pixelmatch. Offers the highest raw performance but may require a C++ compiler if wheels aren't available for your platform and can encounter issues with modern installers like `uv`.
+
+### Performance Comparison
+
+Test conditions: 500×100 RGBA images, Python 3.11.2.
+
+| Variant | Cold Start | Warm Start (JIT) | Relative Speed |
+|-|-|-|-|
+| mapbox/pixelmatch (JS) | 139 ms | 113 ms | **1.00x** |
+| pixelmatch-py | 12,397 ms | 12,216 ms | **0.01x** |
+| pybind11-pixelmatch | 88 ms | 81 ms | **1.40x** |
+| pixelmatch-fast | 1972 ms | 101 ms | **1.12x** |
+
+**Why is the warm start faster?**
+`pixelmatch-fast` leverages [numba](https://numba.pydata.org) for Just-In-Time (JIT) compilation. The "Cold Start" includes the one-time overhead of Numba compiling the Python code into optimized machine code. Subsequent "Warm Start" executions run at full compiled speed.
+
+**Why choose pixelmatch-fast?**
+While `pybind11-pixelmatch` is faster, `pixelmatch-fast` tries to stay up to date with the current `mapbox/pixelmatch` version (currently v7.1.0), provides a more Pythonic experience and is compatible with modern tooling like `uv`. It delivers a **100x speedup** over the pure-Python baseline without the complexities of C++ extensions.
 
 ## Development
 
