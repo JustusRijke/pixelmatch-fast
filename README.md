@@ -7,19 +7,33 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dw/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 
-High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) for perceptual image comparison
+High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) for image comparison. 
 
-Pixelmatch is a tool that automatically highlights differences between two images while ignoring anti-aliasing artifacts.
-
-For more information about pixelmatch capabilities and examples, see the [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) repository.
-
-This project tries to stay up to date with the current pixelmatch version (currently matches with v7.1.0).
+Pixelmatch is a tool that automatically highlights differences between two images while ignoring anti-aliasing artifacts. For more information about pixelmatch capabilities and examples, see the [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) repository.
 
 ## Similar Projects
 
-This project is similar to [pixelmatch-py](https://github.com/whtsky/pixelmatch-py). The key difference is that pixelmatch-fast is much faster by leveraging [numpy](https://numpy.org/) for array operations and [numba](https://numba.pydata.org) for JIT compilation.
+* **[mapbox/pixelmatch](https://github.com/mapbox/pixelmatch)**: The original pixelmatch implementation (JavaScript).
+* **[pixelmatch-py](https://github.com/whtsky/pixelmatch-py)**: A pure-Python port with no dependencies. Best for environments where speed isn't critical or where you cannot install heavy libraries.
+* **[pybind11-pixelmatch](https://github.com/cubao/pybind11_pixelmatch)**: Python bindings for the C++ port of pixelmatch. Offers the highest raw performance but may require a C++ compiler if wheels aren't available for your platform and can encounter issues with modern installers like `uv`.
 
-Use pixelmatch-py if you want a clean port with very little dependencies, use pixelmatch-fast if you need high performance.
+### Performance Comparison
+
+Test conditions: 500×100 RGBA images, Python 3.11.2.
+
+| Variant | Cold Start | Warm Start (JIT) | Relative Speed |
+|-|-|-|-|
+| mapbox/pixelmatch (JS) | 139 ms | 113 ms | **1.00x** |
+| pixelmatch-py | 12,397 ms | 12,216 ms | **0.01x** |
+| pybind11-pixelmatch | 88 ms | 81 ms | **1.40x** |
+| pixelmatch-fast | 1972 ms | 101 ms | **1.12x** |
+
+**Why is the warm start faster?**
+`pixelmatch-fast` leverages [numba](https://numba.pydata.org) for Just-In-Time (JIT) compilation. The "Cold Start" includes the one-time overhead of Numba compiling the Python code into optimized machine code. Subsequent "Warm Start" executions run at full compiled speed.
+
+**Why choose pixelmatch-fast?**
+While `pybind11-pixelmatch` is faster, `pixelmatch-fast` tries to stay up to date with the current `mapbox/pixelmatch` version (currently v7.1.0), provides a more Pythonic experience and is compatible with modern tooling like `uv`. It delivers a **100x speedup** over the pure-Python baseline without the complexities of C++ extensions.
+
 
 ## Installation
 
