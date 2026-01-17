@@ -142,4 +142,3 @@ The CI workflow automatically runs tests both with and without numba enabled, en
 ## License
 
 MIT
-
