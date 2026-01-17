@@ -26,6 +26,7 @@ dependencies = [
     "numba>=0.57",
     "numpy>=1.22.3",
     "pillow>=10",
+    "pre-commit>=4.5.1",
 ]
 
 [project.urls]

@@ -7,7 +7,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dw/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 
-High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) for image comparison. 
+High-performance Python port of [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) for image comparison.
 
 Pixelmatch is a tool that automatically highlights differences between two images while ignoring anti-aliasing artifacts. For more information about pixelmatch capabilities and examples, see the [mapbox/pixelmatch](https://github.com/mapbox/pixelmatch) repository.
 
@@ -21,7 +21,7 @@ pip install pixelmatch-fast
 
 ## CLI Usage
 
-```
+```bash
 $ pixelmatch --help
 
 Usage: pixelmatch [OPTIONS] IMG1 IMG2
@@ -45,6 +45,7 @@ Options:
 ```
 
 Example (using test images from the [mapbox/pixelmatch repository](https://github.com/mapbox/pixelmatch/tree/main/test/fixtures)):
+
 ```bash
 $ pixelmatch 1a.png 1b.png -o diff.png
 Mismatched pixels: 106
@@ -79,19 +80,18 @@ print(f"Found {num_diff} mismatched pixels")
 - `diff_color_alt` — Tuple of `(R, G, B)` for an alternative color to use for dark on light differences to differentiate between "added" and "removed" parts. If not provided, all differing pixels use `diff_color`.
 - `diff_mask` — Draw the diff over a transparent background (a mask), rather than over the original image. `False` by default.
 
-
 ## Similar Projects
 
-* **[mapbox/pixelmatch](https://github.com/mapbox/pixelmatch)**: The original pixelmatch implementation (JavaScript).
-* **[pixelmatch-py](https://github.com/whtsky/pixelmatch-py)**: A pure-Python port with no dependencies. Best for environments where speed isn't critical or where you cannot install heavy libraries.
-* **[pybind11-pixelmatch](https://github.com/cubao/pybind11_pixelmatch)**: Python bindings for the C++ port of pixelmatch. Offers the highest raw performance but may require a C++ compiler if wheels aren't available for your platform and can encounter issues with modern installers like `uv`.
+- **[mapbox/pixelmatch](https://github.com/mapbox/pixelmatch)**: The original pixelmatch implementation (JavaScript).
+- **[pixelmatch-py](https://github.com/whtsky/pixelmatch-py)**: A pure-Python port with no dependencies. Best for environments where speed isn't critical or where you cannot install heavy libraries.
+- **[pybind11-pixelmatch](https://github.com/cubao/pybind11_pixelmatch)**: Python bindings for the C++ port of pixelmatch. Offers the highest raw performance but may require a C++ compiler if wheels aren't available for your platform and can encounter issues with modern installers like `uv`.
 
 ### Performance Comparison
 
 Test conditions: 500×100 RGBA images, Python 3.11.2.
 
 | Variant | Cold Start | Warm Start (JIT) | Relative Speed |
-|-|-|-|-|
+| - | - | - | - |
 | mapbox/pixelmatch (JS) | 139 ms | 113 ms | **1.00x** |
 | pixelmatch-py | 12,397 ms | 12,216 ms | **0.01x** |
 | pybind11-pixelmatch | 88 ms | 81 ms | **1.40x** |
@@ -114,27 +114,32 @@ source .venv/bin/activate
 
 Skip `--locked` to use the newest dependencies (this might modify `uv.lock`)
 
+### Testing
+
 Run tests:
+
 ```bash
 pytest
 ```
 
 Run tests with coverage (disables numba JIT compilation):
+
 ```bash
 NUMBA_DISABLE_JIT=1 pytest --cov
 ```
 
-Check code quality:
+### Quality Assurance (QA)
+
+Automatically run code quality checks before every commit using [pre-commit](https://pre-commit.com/):
+
 ```bash
-ruff check
-ruff format --check
-ty check
+pre-commit install
 ```
 
-Better yet, install the [pre-commit](.git/hooks/pre-commit) hook, which runs code quality checks before every commit:
+This installs git hooks that run ruff, type checks, and other checks before each commit. You can run manually at any time with:
+
 ```bash
-cp hooks/pre-commit .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
+pre-commit run --all-files
 ```
 
 The CI workflow automatically runs tests both with and without numba enabled, ensuring both the optimized and fallback code paths are tested.
