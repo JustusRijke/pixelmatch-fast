@@ -523,11 +523,12 @@ dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pillow" },
-    { name = "pre-commit" },
 ]
 
 [package.dev-dependencies]
 dev = [
+    { name = "nodeenv" },
+    { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
@@ -540,11 +541,12 @@ requires-dist = [
     { name = "numba", specifier = ">=0.57" },
     { name = "numpy", specifier = ">=1.22.3" },
     { name = "pillow", specifier = ">=10" },
-    { name = "pre-commit", specifier = ">=4.5.1" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "nodeenv", specifier = ">=1.4.0" },
+    { name = "pre-commit", specifier = ">=4.5.1" },
     { name = "pytest", specifier = ">=9" },
     { name = "pytest-cov", specifier = ">=6" },
     { name = "ruff", specifier = ">=0.10" },

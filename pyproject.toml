@@ -26,7 +26,6 @@ dependencies = [
     "numba>=0.57",
     "numpy>=1.22.3",
     "pillow>=10",
-    "pre-commit>=4.5.1",
 ]
 
 [project.urls]
@@ -39,6 +38,8 @@ dev = [
     "pytest-cov>=6",
     "ruff>=0.10",
     "ty>=0.0.8",
+    "pre-commit>=4.5.1",
+    "nodeenv>=1.4.0", # Required for pre-commit, version without pkg_resources dependency
 ]
 
 [project.scripts]
