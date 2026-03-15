@@ -346,7 +346,7 @@ def pixelmatch(
     if np.array_equal(a32, b32):
         if not diff_mask:
             _draw_gray_pixels(arr1, output_arr, alpha)
-        if output:  # pragma: no cover
+        if isinstance(output, Image.Image):
             _save_diff_output(output, output_arr)
         return 0
 
@@ -377,8 +377,7 @@ def pixelmatch(
         diff_color_alt[2],
     )
 
-    # Save diff image if output provided
-    if output:
+    if output and (diff > 0 or isinstance(output, Image.Image)):
         _save_diff_output(output, output_arr)
 
     return diff
