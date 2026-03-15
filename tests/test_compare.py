@@ -113,3 +113,14 @@ def test_output_diff_file(tmp_path: Path) -> None:
         output=diff_path,
     )
     assert diff_path.exists()
+
+
+def test_no_output_when_no_diff(tmp_path: Path) -> None:
+    diff_path = tmp_path / "diff.png"
+    result = pixelmatch(
+        Path("tests/fixtures/1a.png"),
+        Path("tests/fixtures/1a.png"),
+        output=diff_path,
+    )
+    assert result == 0
+    assert not diff_path.exists()
