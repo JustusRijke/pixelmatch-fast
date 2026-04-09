@@ -13,7 +13,7 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{name = "Justus Rijke", email="justusrijke@gmail.com"}]
-requires-python = ">=3.10.0"
+requires-python = ">=3.11.0"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 5 - Production/Stable",
@@ -25,7 +25,11 @@ dependencies = [
     "click>=8",
     "numba>=0.57",
     "numpy>=1.22.3",
-    "pillow>=10",
+    "pillow>=12",
+
+    # Add a lower bound for unpinned transitive dependencies
+    "llvmlite>=0.46.0",
+    "numpy>=2.4.3",
 ]
 
 [project.urls]
@@ -40,6 +44,7 @@ dev = [
     "ty>=0.0.8",
     "pre-commit>=4.5.1",
     "nodeenv>=1.4.0", # Required for pre-commit, version without pkg_resources dependency
+    "tomli>=2.4.1",
 ]
 
 [project.scripts]

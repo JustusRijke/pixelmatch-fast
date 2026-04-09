@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/JustusRijke/pixelmatch-fast/actions/workflows/build.yml/badge.svg)](https://github.com/JustusRijke/pixelmatch-fast/actions/workflows/build.yml)
 [![codecov](https://codecov.io/github/JustusRijke/pixelmatch-fast/graph/badge.svg?token=PXD6VY28LO)](https://codecov.io/github/JustusRijke/pixelmatch-fast)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PyPI - Version](https://img.shields.io/pypi/v/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dw/pixelmatch-fast)](https://pypi.org/project/pixelmatch-fast/)
