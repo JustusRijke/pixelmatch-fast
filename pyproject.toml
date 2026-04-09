@@ -1,54 +1,54 @@
-[build-system]
-requires = [
-    "hatchling",
-    "hatch-vcs",
-]
-build-backend = "hatchling.build"
-
 [project]
 name = "pixelmatch-fast"
-dynamic = ["version"]
 description = "High-performance Python port of mapbox/pixelmatch for perceptual image comparison"
 readme = "README.md"
+requires-python = ">=3.11.1"
 license = "MIT"
 license-files = ["LICENSE"]
-authors = [{name = "Justus Rijke", email="justusrijke@gmail.com"}]
-requires-python = ">=3.11.1"
+authors = [{ name = "Justus Rijke", email = "justusrijke@gmail.com" }]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Development Status :: 5 - Production/Stable",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX :: Linux",
-    "Typing :: Typed",
+  "Development Status :: 5 - Production/Stable",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Typing :: Typed",
 ]
 dependencies = [
-    "click>=8",
-    "numba>=0.57",
-    "numpy>=1.22.3",
-    "pillow>=12",
+  "click>=8",
+  "numba>=0.57",
+  "numpy>=1.22.3",
+  "pillow>=12",
 
-    # Add a lower bound for unpinned transitive dependencies
-    "llvmlite>=0.46.0",
-    "numpy>=2.4.3",
+  # Add a lower bound for unpinned transitive dependencies
+  "llvmlite>=0.46.0",
+  "numpy>=2.4.3",
 ]
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/JustusRijke/pixelmatch-fast"
 Issues = "https://github.com/JustusRijke/pixelmatch-fast/issues"
 
-[dependency-groups]
-dev = [
-    "pytest>=9",
-    "pytest-cov>=6",
-    "ruff>=0.10",
-    "ty>=0.0.8",
-    "pre-commit>=4.5.1",
-    "nodeenv>=1.4.0", # Required for pre-commit, version without pkg_resources dependency
-    "tomli>=2.4.1",
-]
-
 [project.scripts]
 pixelmatch = "pixelmatch.cli:cli"
+
+[dependency-groups]
+dev = [
+  "nodeenv>=1.4.0",  # Required for pre-commit, version without pkg_resources dependency
+  "pre-commit>=4.5.1",
+  "pytest>=9",
+  "pytest-cov>=6",
+  "ruff>=0.10",
+  "tomli>=2.4.1",
+  "ty>=0.0.8",
+]
+
+[build-system]
+requires = [
+  "hatch-vcs",
+  "hatchling",
+]
+build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pixelmatch"]
@@ -60,26 +60,28 @@ source = "vcs"
 local_scheme = "no-local-version"
 
 [tool.pytest]
+addopts = [
+  "--cov-branch",  # Make sure to cover every decision branch
+  "--cov-report=term-missing",  # Report which lines aren't covered
+  "--cov-report=xml",  # Dump to XML for Codecov
+  "-v",  # Verbose output
+]
+filterwarnings = [
+  "error"
+]  # Treat all warnings as errors (e.g., deprecation warnings)
 strict = true
 testpaths = ["tests"]
-filterwarnings = ["error"] # Treat all warnings as errors (e.g., deprecation warnings)
-addopts = [
-    "-v", # Verbose output
-    "--cov-branch", # Make sure to cover every decision branch
-    "--cov-report=term-missing", # Report which lines aren't covered
-    "--cov-report=xml", # Dump to XML for Codecov
-]
 
 [tool.ruff.lint]
 extend-select = [
-    "I",    # Sort imports
-    "ANN",  # Enforce type annotations
-    "PT",   # Common style issues or inconsistencies with pytest-based tests
-    "NPY",  # NumPy specific rules
+  "I",  # Sort imports
+  "ANN",  # Enforce type annotations
+  "PT",  # Common style issues or inconsistencies with pytest-based tests
+  "NPY",  # NumPy specific rules
 ]
 
 [tool.ruff.lint.isort]
-combine-as-imports = true # Combines "as" imports on the same line
+combine-as-imports = true  # Combines "as" imports on the same line
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["ANN"] # Do not enforce type annotations for tests
+"tests/**" = ["ANN"]  # Do not enforce type annotations for tests
